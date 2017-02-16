@@ -12,4 +12,4 @@ A working Go development environment is required with a correctly configured GOP
 
 ## Usage
 
-Once built, a command line tool will be available which is controlled by flags. Running `mCrawler - h` will display help information about the options including example input.
+Once built, a command line tool will be available which is controlled by flags. Running `mCrawler -h` will display help information about the options including example input.
