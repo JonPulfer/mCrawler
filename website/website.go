@@ -63,8 +63,8 @@ func (n *Node) IsNode(s string) bool {
 	return n.Name == s
 }
 
-// GetDirectory returns the node representing the child directory with the provided name or nil if
-// it doesn't exist.
+// GetDirectory returns the node representing the child directory with the provided name or creates
+// the directory in the node and returns that.
 func (n *Node) GetDirectory(s string) *Node {
 	if len(s) == 0 {
 		return n
