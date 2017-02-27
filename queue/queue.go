@@ -2,6 +2,7 @@ package queue
 
 import (
 	"log"
+	"strings"
 	"sync"
 
 	"github.com/JonPulfer/mCrawler/pageloader"
@@ -25,12 +26,11 @@ func NewItems() *Items {
 
 // Add a new item onto the queue.
 func (qi *Items) Add(r *pageloader.Request) {
-	qi.RLock()
-	_, ok := qi.Seen[r.URL]
-	qi.RUnlock()
-	if ok {
+
+	if qi.haveSeen(r.URL) {
 		return
 	}
+
 	qi.Lock()
 	log.Println("adding request to the queue")
 	qi.Stack = append(qi.Stack, r)
@@ -64,4 +64,23 @@ func (qi *Items) Len() int {
 	log.Printf("queue length: %d\n", c)
 	qi.RUnlock()
 	return c
+}
+
+func (qi *Items) haveSeen(s string) bool {
+	qi.RLock()
+	defer qi.RUnlock()
+
+	if _, ok := qi.Seen[s]; ok {
+		return true
+	}
+
+	if _, ok := qi.Seen[strings.TrimRight(s, "/")]; ok {
+		return true
+	}
+
+	if _, ok := qi.Seen[s+"/"]; ok {
+		return true
+	}
+
+	return false
 }
